@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Finish the Line — redesign demo</title>
+<meta name="description" content="A demo of a redesigned Finish the Line: see the first part of a real chart, draw what happened next.">
+<meta name="theme-color" content="#F5F5F2" id="themeColor">
+<script>
+  (function () {
+    var saved = null;
+    try { saved = localStorage.getItem('ftl-demo-theme'); } catch (e) {}
+    var night = saved ? saved === 'night' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.dataset.theme = night ? 'night' : 'paper';
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+
+  <header class="bar">
+    <div class="wordmark">FINISH THE LINE</div>
+    <div class="bar-right">
+      <div class="ticks" id="ticks" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="count" id="count">1/3</div>
+      <button class="help-btn" id="helpBtn" type="button" aria-label="How to play"><span>?</span></button>
+    </div>
+  </header>
+
+  <main class="play" id="play">
+    <div class="question">
+      <h1 id="title"></h1>
+      <p id="ask"></p>
+    </div>
+
+    <div class="chart-wrap" id="chartWrap">
+      <svg id="chart" role="img" aria-label="Chart. Drag from the dot to the right edge to draw what happened next."></svg>
+    </div>
+
+    <div class="dock">
+      <div class="status" id="status" aria-live="polite"></div>
+
+      <div class="actions" id="actions">
+        <button class="btn sq" id="clearBtn" type="button" aria-label="Clear and redraw" hidden>
+          <svg width="22" height="22" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h8a4 4 0 0 1 0 8H8"/><path d="M7 5 4 8l3 3"/></svg>
+        </button>
+        <button class="btn sq" id="doubleBtn" type="button" aria-label="Double the score for this chart" aria-pressed="false">
+          <span class="big">2×</span><span class="sub" id="doubleSub">SCORE</span>
+        </button>
+        <button class="btn primary" id="lockBtn" type="button" disabled>Lock in</button>
+      </div>
+
+      <div class="result" id="result" hidden>
+        <div class="result-row">
+          <div class="score"><b id="score">+0</b><span id="scoreOf">OF 100</span></div>
+          <p class="takeaway" id="takeaway"></p>
+        </div>
+        <button class="btn primary" id="nextBtn" type="button">Next chart</button>
+      </div>
+    </div>
+  </main>
+
+  <main class="results" id="results" hidden>
+    <div class="res-head">
+      <div class="label" id="resDay">DAY 6</div>
+      <div class="total"><h1 id="total">0</h1><span>OF 400</span></div>
+      <p class="verdict" id="verdict"></p>
+    </div>
+
+    <ol class="rows" id="rows"></ol>
+
+    <div class="res-foot">
+      <button class="btn primary" id="shareBtn" type="button">Share result</button>
+      <div class="foot-row">
+        <button class="link" id="againBtn" type="button">Play again</button>
+        <span class="credit">Data: World Bank, Our World in Data</span>
+      </div>
+    </div>
+  </main>
+</div>
+
+<dialog class="sheet" id="help" aria-labelledby="helpTitle">
+  <form method="dialog">
+    <h2 id="helpTitle">How to play</h2>
+    <ol>
+      <li><span>1</span><span>Draw what happened next. Drag from the dot to the right edge.</span></li>
+      <li><span>2</span><span>Lock in. The real line is drawn over yours.</span></li>
+      <li><span>3</span><span>The closer your line is to the real one, the more you score. Up to 100 a chart.</span></li>
+      <li><span>4</span><span>2× score doubles your points on one chart a day. Pick it before you lock in.</span></li>
+    </ol>
+    <div class="theme-row">
+      <span>Theme</span>
+      <div class="seg" role="group" aria-label="Theme">
+        <button type="button" data-theme-pick="paper" aria-pressed="false">Paper</button>
+        <button type="button" data-theme-pick="night" aria-pressed="false">Night</button>
+      </div>
+    </div>
+    <p class="small">Three charts a day. Real data from the World Bank and Our World in Data. This is a design demo: it always shows the same three charts.</p>
+    <button class="btn primary" type="submit">Got it</button>
+  </form>
+</dialog>
+
+<script type="module" src="src/app.js"></script>
+</body>
+</html>
